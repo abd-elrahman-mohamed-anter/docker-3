@@ -83,31 +83,6 @@ Finally, the running applications are accessed from a web browser using the host
 ![5](5.png)
 
 
-Docker Network Creation: The command docker network create petclinic-net successfully creates a new network named petclinic-net.
-A container named spring1 and spring2 were started successfully, attached to the new network, and its internal port 8080 is mapped to the host's port 8081 and 8082.
-
-![1](1.png)
-
-we entered spring2 and made ifconfig 
-
-![2](2.png)  
-
-I entered spring1 and ping on the spring2 ip to see the outcomes .
-The ping worked 
-
-![3](3.png)  
-
-The port 8081 worked for spring 1
-
-![4](4.png)  
-
-The port 8082 worked for spring 2
-
-![5](5.png)  
-
-Rerun spring1 and 2 with the all options in the petclinic-net network with port,network and database 
-
-![6](6.png)  
 
 Run the new db ==> db1 and db2 and they have the same volume 
 
