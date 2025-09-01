@@ -82,15 +82,9 @@ Finally, the running applications are accessed from a web browser using the host
 ![4](4.png)  
 ![5](5.png)
 
-# Docker Petclinic Project
-
-This project demonstrates a multi-container Docker setup for the **Spring Petclinic** application, focusing on network management and container communication.
-
 ---
 
-## 🚀 Steps and Command Explanations
-
-### 1. Running the Database Containers
+### 5. Running the Database Containers
 
 The process begins by launching two separate MySQL database containers, named **`db1`** and **`db2`**. A **`docker run`** command is used for each, specifying their names, networks, and environment variables for the root password and initial database creation. The `-v` flag is also included to ensure data persistence by mounting a volume.
 
@@ -118,7 +112,7 @@ The image below shows a similar command for `db2` and another database container
 
 ---
 
-### 2. Verifying Running Containers
+### 6. Verifying Running Containers
 
 The **`docker ps`** command is used to list all currently active containers. This is a vital step to confirm that both application containers (`spring1`, `spring2`) and at least one of the database containers (`db1`) are running as expected.
 
@@ -126,7 +120,7 @@ The **`docker ps`** command is used to list all currently active containers. Thi
 
 ---
 
-### 3. Connecting Application Containers to Databases
+### 7. Connecting Application Containers to Databases
 
 The `spring1` and `spring2` application containers are launched and configured to connect to their respective databases. The **`-e`** flag is used to pass environment variables that specify the database URL, username, and password. This is how the applications know where to find and how to connect to their databases.
 
@@ -137,15 +131,14 @@ The `spring1` and `spring2` application containers are launched and configured t
 
 ---
 
-### 4. Inspecting Databases from Inside a Container
-
+### 8. Inspecting Databases from Inside a Container
 To verify the database setup, you can use the **`docker exec`** command to run a command inside a running container. Here, `docker exec` is used to access the `db1` container and run the MySQL client. The `SHOW DATABASES;` command confirms that both the `clinic1` and `clinic2` databases have been successfully created, indicating that both applications are correctly connected and functional.
 
 ![9](9.png)
 
 ---
 
-### 5. Running a New Application on an Isolated Network
+### 9. Running a New Application on an Isolated Network
 
 This step showcases Docker's networking capabilities. A new network called **`spring3-net`** is created. A new database container, `db3`, and a new application container, `spring3`, are launched on this new network. The `spring3` container is also configured to use a new host port, **`8083`**. This demonstrates how to create completely isolated environments for different application instances.
 
@@ -157,7 +150,7 @@ The `docker ps` command is then run again to confirm that `spring3` and `db3` ar
 
 ---
 
-### 6. Managing Container Network Connectivity
+### 10. Managing Container Network Connectivity
 
 An attempt is made to connect the `db1` container to the `petclinic-net` using **`docker network connect`**. The command returns an error because `db1` is already connected to that network, highlighting that this command is used to add a container to a network, not to verify an existing connection.
 
@@ -169,7 +162,7 @@ The `docker network connect` command is then used correctly to add the **`spring
 
 ---
 
-### 7. Accessing the New Application
+### 11. Accessing the New Application
 
 Finally, the new `spring3` application is accessed in a web browser using `http://localhost:8083`. This proves that the container is running, is correctly mapped to the host's port, and is accessible. The successful display of the Petclinic welcome page validates the entire setup, including the network and database connections.
 
@@ -178,41 +171,7 @@ Finally, the new `spring3` application is accessed in a web browser using `http:
 
 
 
-Run the new db ==> db1 and db2 and they have the same volume 
 
-![16](16.png)
-
-Run docker ps 
-
-![7](7.png)  
-
-Exec db1 
-
-![9](9.png) 
-
-Connect spring1 and spring2 with the db/clinic1 and clinc2 
-
-![10](10.png)  
-
-Create spring3 which have anothe network AND anothe db ---> db3 and have 8083 port
-
-![11](11.png)  
-
-Run docker ps
-
-![12](12.png)  
-
-Trying to connect spring3 with db1 and error happens
-
-![13](13.png)  
-
-connect spring3 with the other network which has db1 and db2 inside it 
-
-![14](14.png) 
-
-And connected sucessfully on port 8083
-
-![15](15.png)
 
 
 
