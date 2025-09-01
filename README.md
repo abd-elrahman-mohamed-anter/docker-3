@@ -82,6 +82,100 @@ Finally, the running applications are accessed from a web browser using the host
 ![4](4.png)  
 ![5](5.png)
 
+# Docker Petclinic Project
+
+This project demonstrates a multi-container Docker setup for the **Spring Petclinic** application, focusing on network management and container communication.
+
+---
+
+## 🚀 Steps and Command Explanations
+
+### 1. Running the Database Containers
+
+The process begins by launching two separate MySQL database containers, named **`db1`** and **`db2`**. A **`docker run`** command is used for each, specifying their names, networks, and environment variables for the root password and initial database creation. The `-v` flag is also included to ensure data persistence by mounting a volume.
+
+```bash
+docker run -d \
+--name db1 \
+--network petclinic-net \
+-e MYSQL_ROOT_PASSWORD=root \
+-e MYSQL_DATABASE=clinic1 \
+-v mysql-data1:/var/lib/mysql \
+mysql:8.0
+
+docker run -d \
+--name db2 \
+--network petclinic-net \
+-e MYSQL_ROOT_PASSWORD=root \
+-e MYSQL_DATABASE=clinic2 \
+-v mysql-data2:/var/lib/mysql \
+mysql:8.0
+```
+
+The image below shows a similar command for `db2` and another database container `db3` on a different network, demonstrating the consistency of the command structure.
+
+![16](16.png)
+
+---
+
+### 2. Verifying Running Containers
+
+The **`docker ps`** command is used to list all currently active containers. This is a vital step to confirm that both application containers (`spring1`, `spring2`) and at least one of the database containers (`db1`) are running as expected.
+
+![7](7.png)
+
+---
+
+### 3. Connecting Application Containers to Databases
+
+The `spring1` and `spring2` application containers are launched and configured to connect to their respective databases. The **`-e`** flag is used to pass environment variables that specify the database URL, username, and password. This is how the applications know where to find and how to connect to their databases.
+
+- `spring1` connects to the `clinic1` database on the **`db1`** container.  
+- `spring2` connects to the `clinic2` database on the **`db2`** container.  
+
+![10](10.png)
+
+---
+
+### 4. Inspecting Databases from Inside a Container
+
+To verify the database setup, you can use the **`docker exec`** command to run a command inside a running container. Here, `docker exec` is used to access the `db1` container and run the MySQL client. The `SHOW DATABASES;` command confirms that both the `clinic1` and `clinic2` databases have been successfully created, indicating that both applications are correctly connected and functional.
+
+![9](9.png)
+
+---
+
+### 5. Running a New Application on an Isolated Network
+
+This step showcases Docker's networking capabilities. A new network called **`spring3-net`** is created. A new database container, `db3`, and a new application container, `spring3`, are launched on this new network. The `spring3` container is also configured to use a new host port, **`8083`**. This demonstrates how to create completely isolated environments for different application instances.
+
+![11](11.png)
+
+The `docker ps` command is then run again to confirm that `spring3` and `db3` are now also running, alongside the previously launched containers.
+
+![12](12.png)
+
+---
+
+### 6. Managing Container Network Connectivity
+
+An attempt is made to connect the `db1` container to the `petclinic-net` using **`docker network connect`**. The command returns an error because `db1` is already connected to that network, highlighting that this command is used to add a container to a network, not to verify an existing connection.
+
+![13](13.png)
+
+The `docker network connect` command is then used correctly to add the **`spring3`** container to the **`petclinic-net`**. This is a crucial step that allows `spring3` to communicate with the `db1` and `db2` containers on that network.
+
+![14](14.png)
+
+---
+
+### 7. Accessing the New Application
+
+Finally, the new `spring3` application is accessed in a web browser using `http://localhost:8083`. This proves that the container is running, is correctly mapped to the host's port, and is accessible. The successful display of the Petclinic welcome page validates the entire setup, including the network and database connections.
+
+![15](15.png)
+
+
 
 
 Run the new db ==> db1 and db2 and they have the same volume 
